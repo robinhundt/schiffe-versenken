@@ -1,6 +1,7 @@
 public class Grid {
 	
 	public void printShips(boolean ships[][]) {
+		System.out.println("Printing Ships");
 		for (int i=0; i<=9; i++) {
 			for (int j=0; j<=9; j++) {
 				if (ships[i][j] == true)

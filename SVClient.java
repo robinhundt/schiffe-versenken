@@ -16,6 +16,57 @@ public class SVClient {
 		return grid;
 	}
 
+	private static boolean[][] getShipPos() {
+		boolean[][] grid = new boolean[GRID_SIZE][GRID_SIZE];
+		String input;
+		int leftX;
+		int leftY;
+		int rightX;
+		int rightY;
+		boolean schlachter = false;
+
+		while (!schlachter) {
+			System.out.println("Gebe die Postition deines Schlachtschiffes ein (5 Kästchen).");
+			input = StdIn.readLine();
+			leftX = Integer.parseInt(input.substring(0, 1));
+			leftY = Integer.parseInt(input.substring(1, 2));
+			rightX = Integer.parseInt(input.substring(6, 7));
+			rightY = Integer.parseInt(input.substring(7, 8));
+			if (leftX == rightX && input.length() == 8) {
+				if (leftY == rightY-4 || leftY == rightY+4) {
+					schlachter = true;
+					if (leftY > rightY) {
+						for (int i=0; i<=4; i++) {
+							grid[leftX][rightY+i] = true;
+						}
+					} else {
+						for (int i=0; i<=4; i++) {
+							grid[leftX][leftY+i] = true;
+						}
+					}
+
+				}
+			} else if(leftY == rightY && input.length() == 8) {
+				if (leftX == rightX-4 || leftY == rightX+4) {
+					schlachter = true;
+					if (leftX > rightX) {
+						for (int i=0; i<=4; i++) {
+							grid[rightX+i][rightY] = true;
+						}
+					} else {
+						for (int i=0; i<=4; i++) {
+							grid[leftX+i][rightY] = true;
+						}
+					}
+
+				}
+			} else {
+				System.out.println("Flasche Eingabe der Schlachtschiffposition.");
+			}
+		}
+		return grid;
+	}
+
 	public static void main(String[] args) {
 		int[] shipPos = new int[2];
 		String hostName = "";
@@ -26,11 +77,12 @@ public class SVClient {
 		int shotAtx = -1;
 		int shotAty = -1;
 
-		/*if (args.length != 2) {
+		if (args.length != 2 && args.length != 1) {
 			System.err.println(
-					"Usage: java EchoClient <host name> <port number>");
+					"Usage: 'java SVClient <port number>' to start a sever or 'java SVClient <hostname> <port number>'" +
+					" to connect to a server");
 			System.exit(1);
-		}*/
+		}
 
 		if (args.length == 1)
 			portNumber = Integer.parseInt(args[0]);
@@ -41,6 +93,7 @@ public class SVClient {
 
 		if (args.length == 2) {
 			try (
+
 					Socket SVSocket = new Socket(hostName, portNumber);
 					PrintWriter out = new PrintWriter(SVSocket.getOutputStream(), true);
 					BufferedReader in = new BufferedReader(new InputStreamReader(SVSocket.getInputStream()));
@@ -49,13 +102,14 @@ public class SVClient {
 
 				String fromEnemy;
 				String fromPlayer;
-				Grid gameGrid = new Grid("Player 1");
+				Grid gameGrid = new Grid("Player 2");
 
 				// reads in Ship positions and displays them on the grid
-				System.out.println("Position der Schiffe eingeben:");
+				/*System.out.println("Position der Schiffe eingeben:");
 				for (int i=0; i<shipPos.length; i++)
 					shipPos[i] = Integer.parseInt(stdIn.readLine()) -1;	//-1 da Feld 1 1 im Array 0 0 abgespeichert wird
-				ships = initializeBoard(shipPos);
+				ships = initializeBoard(shipPos);*/
+				ships = getShipPos();
 				gameGrid.printShips(ships); 
 
 				while (true) {
@@ -88,14 +142,14 @@ public class SVClient {
 					}
 
 				}
-					} catch (UnknownHostException e) {
-						System.err.println("Don't know about host " + hostName);
-						System.exit(1);
-					} catch (IOException e) {
-						System.err.println("Couldn't get I/O for the connection to " +
-								hostName);
-						System.exit(1);
-					}
+			} catch (UnknownHostException e) {
+				System.err.println("Don't know about host " + hostName);
+				System.exit(1);
+			} catch (IOException e) {
+				System.err.println("Couldn't get I/O for the connection to " +
+						hostName);
+				System.exit(1);
+			}
 
 		} else if (args.length == 1) {
 			try (
@@ -109,7 +163,7 @@ public class SVClient {
 
 				String fromEnemy;
 				String fromPlayer;
-				Grid gameGrid = new Grid("Player 2");
+				Grid gameGrid = new Grid("Player 1");
 
 				// reads in Ship positions and displays them on the grid
 				System.out.println("Position der Schiffe eingeben:");
@@ -148,15 +202,15 @@ public class SVClient {
 					}
 
 				}
-					} catch (UnknownHostException e) {
-						System.err.println("Don't know about host " + hostName);
-						System.exit(1);
-					} catch (IOException e) {
-						System.err.println("Couldn't get I/O for the connection to " +
-								hostName);
-						System.exit(1);
-					}
+			} catch (UnknownHostException e) {
+				System.err.println("Don't know about host " + hostName);
+				System.exit(1);
+			} catch (IOException e) {
+				System.err.println("Couldn't get I/O for the connection to " +
+						hostName);
+				System.exit(1);
 			}
-					
+		}
+
 	}
 }

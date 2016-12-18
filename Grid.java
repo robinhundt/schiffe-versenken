@@ -1,7 +1,7 @@
 public class Grid {
 	
 	public void printShips(boolean ships[][]) {
-		System.out.println("Printing Ships");
+		//System.out.println("Printing Ship");
 		for (int i=0; i<=9; i++) {
 			for (int j=0; j<=9; j++) {
 				if (ships[i][j] == true)
@@ -10,14 +10,14 @@ public class Grid {
 		}
 	}
 	public boolean printEnemyShot(boolean ships[][], int x, int y) {
-		if (ships[x-1][y-1] == true) {
+		if (ships[x][y] == true) {
 			StdDraw.setPenColor(StdDraw.RED);
-			StdDraw.filledSquare(x-0.5, 10.5-y, 0.5);
+			StdDraw.filledSquare(x+0.5, 9.5-y, 0.5);
 			StdDraw.setPenColor(StdDraw.BLACK);
 			return true;
 		} else {
 			StdDraw.setPenColor(StdDraw.GRAY);
-			StdDraw.filledSquare(x-0.5, 10.5-y, 0.5);
+			StdDraw.filledSquare(x+0.5, 9.5-y, 0.5);
 			StdDraw.setPenColor(StdDraw.BLACK);
 			return false;
 		}
@@ -26,10 +26,10 @@ public class Grid {
 	
 	public void printOwnShot(int x, int y, boolean hit) {
 		if (hit == false)
-			StdDraw.filledSquare(x+11.5, 10.5-y, 0.5);
+			StdDraw.filledSquare(x+12.5, 9.5-y, 0.5);
 		if (hit == true) {
 			StdDraw.setPenColor(StdDraw.RED);
-			StdDraw.filledSquare(x+11.5, 10.5-y, 0.5);
+			StdDraw.filledSquare(x+12.5, 9.5-y, 0.5);
 			StdDraw.setPenColor(StdDraw.BLACK);
 		}
 			

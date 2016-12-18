@@ -16,7 +16,7 @@ public class SVClient {
 		return grid;
 	}*/
 
-	private static boolean[][] getShipsPos(Grid gameGrid) {
+	private static boolean[][] getShipsPos(Grid gameGrid, BufferedReader stdIn) {
 		boolean[][] shipsPos = new boolean[GRID_SIZE][GRID_SIZE];
 		String input;
 		int leftX;
@@ -28,199 +28,202 @@ public class SVClient {
 		int zerstoerer = 0;
 		int uboote = 0;
 
-		while (!schlachter) {
-			System.out.println("Gebe die Postition deines Schlachtschiffes ein (5 Kästchen).");
-			input = StdIn.readLine();
-			if (input.length() == 8) {
-				leftX = Integer.parseInt(input.substring(0, 1));
-				leftY = Integer.parseInt(input.substring(1, 2));
-				rightX = Integer.parseInt(input.substring(6, 7));
-				rightY = Integer.parseInt(input.substring(7, 8));
-				if (leftX == rightX && input.length() == 8) {
-					if (leftY == rightY-4 || leftY == rightY+4) {
-						schlachter = true;
-						if (leftY > rightY) {
-							for (int i=0; i<=4; i++) {
-								shipsPos[leftX][rightY+i] = true;
+		try {
+			while (!schlachter) {
+				System.out.println("Gebe die Postition deines Schlachtschiffes ein (5 Kästchen).");
+				input = stdIn.readLine();
+				if (input.length() == 8) {
+					leftX = Integer.parseInt(input.substring(0, 1));
+					leftY = Integer.parseInt(input.substring(1, 2));
+					rightX = Integer.parseInt(input.substring(6, 7));
+					rightY = Integer.parseInt(input.substring(7, 8));
+					if (leftX == rightX && input.length() == 8) {
+						if (leftY == rightY-4 || leftY == rightY+4) {
+							schlachter = true;
+							if (leftY > rightY) {
+								for (int i=0; i<=4; i++) {
+									shipsPos[leftX][rightY+i] = true;
+								}
+								gameGrid.printShips(shipsPos);
+							} else {
+								for (int i=0; i<=4; i++) {
+									shipsPos[leftX][leftY+i] = true;
+								}
+								gameGrid.printShips(shipsPos);
 							}
-							gameGrid.printShips(shipsPos);
-						} else {
-							for (int i=0; i<=4; i++) {
-								shipsPos[leftX][leftY+i] = true;
-							}
-							gameGrid.printShips(shipsPos);
-						}
 
-					}
-				} else if(leftY == rightY && input.length() == 8) {
-					if (leftX == rightX-4 || leftY == rightX+4) {
-						schlachter = true;
-						if (leftX > rightX) {
-							for (int i=0; i<=4; i++) {
-								shipsPos[rightX+i][rightY] = true;
-							}
-							gameGrid.printShips(shipsPos);
-						} else {
-							for (int i=0; i<=4; i++) {
-								shipsPos[leftX+i][rightY] = true;
-							}
-							gameGrid.printShips(shipsPos);
 						}
+					} else if(leftY == rightY && input.length() == 8) {
+						if (leftX == rightX-4 || leftY == rightX+4) {
+							schlachter = true;
+							if (leftX > rightX) {
+								for (int i=0; i<=4; i++) {
+									shipsPos[rightX+i][rightY] = true;
+								}
+								gameGrid.printShips(shipsPos);
+							} else {
+								for (int i=0; i<=4; i++) {
+									shipsPos[leftX+i][rightY] = true;
+								}
+								gameGrid.printShips(shipsPos);
+							}
 
-					}
+						}
+					} else {
+						System.out.println("Flasche Eingabe der Schlachtschiffposition.");
+					} 
 				} else {
-					System.out.println("Flasche Eingabe der Schlachtschiffposition.");
-				} 
-			} else {
-				System.out.println("Falsche Koordinateneingabe");
-			}
-		}
-		while (kreuzer < 2) {
-			System.out.println("Gebe die Postition deines Kreuzers ein (4 Kästchen).");
-			input = StdIn.readLine();
-			if (input.length() == 8) {
-				leftX = Integer.parseInt(input.substring(0, 1));
-				leftY = Integer.parseInt(input.substring(1, 2));
-				rightX = Integer.parseInt(input.substring(6, 7));
-				rightY = Integer.parseInt(input.substring(7, 8));
-				if (leftX == rightX) {
-					if (leftY == rightY-3 || leftY == rightY+3) {
-						kreuzer++;
-						if (leftY > rightY) {
-							for (int i=0; i<=3; i++) {
-								shipsPos[leftX][rightY+i] = true;
-							}
-							gameGrid.printShips(shipsPos);
-						} else {
-							for (int i=0; i<=3; i++) {
-								shipsPos[leftX][leftY+i] = true;
-							}
-							gameGrid.printShips(shipsPos);
-						}
-
-					}
-				} else if(leftY == rightY) {
-					if (leftX == rightX-3 || leftY == rightX+3) {
-						kreuzer++;
-						if (leftX > rightX) {
-							for (int i=0; i<=3; i++) {
-								shipsPos[rightX+i][rightY] = true;
-							}
-							gameGrid.printShips(shipsPos);
-						} else {
-							for (int i=0; i<=3; i++) {
-								shipsPos[leftX+i][rightY] = true;
-							}
-							gameGrid.printShips(shipsPos);
-						}
-
-					}
-				} else {
-					System.out.println("Flasche Eingabe der Kreuzerposition.");
+					System.out.println("Falsche Koordinateneingabe");
 				}
-			} else {
-				System.out.println("Falsche Koordinateneingabe");
 			}
-		}
-		while (zerstoerer < 3) {
-			System.out.println("Gebe die Postition deines Zerstoerers ein (3 Kästchen).");
-			input = StdIn.readLine();
-			if (input.length() == 8) {
-				leftX = Integer.parseInt(input.substring(0, 1));
-				leftY = Integer.parseInt(input.substring(1, 2));
-				rightX = Integer.parseInt(input.substring(6, 7));
-				rightY = Integer.parseInt(input.substring(7, 8));
-				if (leftX == rightX && input.length() == 8) {
-					if (leftY == rightY-2 || leftY == rightY+2) {
-						zerstoerer++;
-						if (leftY > rightY) {
-							for (int i=0; i<=2; i++) {
-								shipsPos[leftX][rightY+i] = true;
+			while (kreuzer < 2) {
+				System.out.println("Gebe die Postition deines Kreuzers ein (4 Kästchen).");
+				input = stdIn.readLine();
+				if (input.length() == 8) {
+					leftX = Integer.parseInt(input.substring(0, 1));
+					leftY = Integer.parseInt(input.substring(1, 2));
+					rightX = Integer.parseInt(input.substring(6, 7));
+					rightY = Integer.parseInt(input.substring(7, 8));
+					if (leftX == rightX) {
+						if (leftY == rightY-3 || leftY == rightY+3) {
+							kreuzer++;
+							if (leftY > rightY) {
+								for (int i=0; i<=3; i++) {
+									shipsPos[leftX][rightY+i] = true;
+								}
+								gameGrid.printShips(shipsPos);
+							} else {
+								for (int i=0; i<=3; i++) {
+									shipsPos[leftX][leftY+i] = true;
+								}
+								gameGrid.printShips(shipsPos);
 							}
-							gameGrid.printShips(shipsPos);
-						} else {
-							for (int i=0; i<=2; i++) {
-								shipsPos[leftX][leftY+i] = true;
-							}
-							gameGrid.printShips(shipsPos);
-						}
 
-					}
-				} else if(leftY == rightY && input.length() == 8) {
-					if (leftX == rightX-2 || leftY == rightX+2) {
-						zerstoerer++;
-						if (leftX > rightX) {
-							for (int i=0; i<=2; i++) {
-								shipsPos[rightX+i][rightY] = true;
-							}
-							gameGrid.printShips(shipsPos);
-						} else {
-							for (int i=0; i<=2; i++) {
-								shipsPos[leftX+i][rightY] = true;
-							}
-							gameGrid.printShips(shipsPos);
 						}
+					} else if(leftY == rightY) {
+						if (leftX == rightX-3 || leftY == rightX+3) {
+							kreuzer++;
+							if (leftX > rightX) {
+								for (int i=0; i<=3; i++) {
+									shipsPos[rightX+i][rightY] = true;
+								}
+								gameGrid.printShips(shipsPos);
+							} else {
+								for (int i=0; i<=3; i++) {
+									shipsPos[leftX+i][rightY] = true;
+								}
+								gameGrid.printShips(shipsPos);
+							}
 
+						}
+					} else {
+						System.out.println("Flasche Eingabe der Kreuzerposition.");
 					}
 				} else {
-					System.out.println("Flasche Eingabe der Zerstoererposition.");
+					System.out.println("Falsche Koordinateneingabe");
 				}
-			} else {
-				System.out.println("Falsche Koordinateneingabe");
 			}
-		}
-		while (uboote < 4) {
-			System.out.println("Gebe die Postition deines Kreuzers ein (4 Kästchen).");
-			input = StdIn.readLine();
-			if (input.length() == 8) {
-				leftX = Integer.parseInt(input.substring(0, 1));
-				leftY = Integer.parseInt(input.substring(1, 2));
-				rightX = Integer.parseInt(input.substring(6, 7));
-				rightY = Integer.parseInt(input.substring(7, 8));
-				if (leftX == rightX && input.length() == 8) {
-					if (leftY == rightY-1 || leftY == rightY+1) {
-						uboote++;
-						if (leftY > rightY) {
-							for (int i=0; i<=1; i++) {
-								shipsPos[leftX][rightY+i] = true;
+			while (zerstoerer < 3) {
+				System.out.println("Gebe die Postition deines Zerstoerers ein (3 Kästchen).");
+				input = stdIn.readLine();
+				if (input.length() == 8) {
+					leftX = Integer.parseInt(input.substring(0, 1));
+					leftY = Integer.parseInt(input.substring(1, 2));
+					rightX = Integer.parseInt(input.substring(6, 7));
+					rightY = Integer.parseInt(input.substring(7, 8));
+					if (leftX == rightX && input.length() == 8) {
+						if (leftY == rightY-2 || leftY == rightY+2) {
+							zerstoerer++;
+							if (leftY > rightY) {
+								for (int i=0; i<=2; i++) {
+									shipsPos[leftX][rightY+i] = true;
+								}
+								gameGrid.printShips(shipsPos);
+							} else {
+								for (int i=0; i<=2; i++) {
+									shipsPos[leftX][leftY+i] = true;
+								}
+								gameGrid.printShips(shipsPos);
 							}
-							gameGrid.printShips(shipsPos);
-						} else {
-							for (int i=0; i<=1; i++) {
-								shipsPos[leftX][leftY+i] = true;
-							}
-							gameGrid.printShips(shipsPos);
-						}
 
-					}
-				} else if(leftY == rightY && input.length() == 8) {
-					if (leftX == rightX-1 || leftY == rightX+1) {
-						uboote++;
-						if (leftX > rightX) {
-							for (int i=0; i<=1; i++) {
-								shipsPos[rightX+i][rightY] = true;
-							}
-							gameGrid.printShips(shipsPos);
-						} else {
-							for (int i=0; i<=1; i++) {
-								shipsPos[leftX+i][rightY] = true;
-							}
-							gameGrid.printShips(shipsPos);
 						}
+					} else if(leftY == rightY && input.length() == 8) {
+						if (leftX == rightX-2 || leftY == rightX+2) {
+							zerstoerer++;
+							if (leftX > rightX) {
+								for (int i=0; i<=2; i++) {
+									shipsPos[rightX+i][rightY] = true;
+								}
+								gameGrid.printShips(shipsPos);
+							} else {
+								for (int i=0; i<=2; i++) {
+									shipsPos[leftX+i][rightY] = true;
+								}
+								gameGrid.printShips(shipsPos);
+							}
 
+						}
+					} else {
+						System.out.println("Flasche Eingabe der Zerstoererposition.");
 					}
 				} else {
-					System.out.println("Flasche Eingabe der Schlachtschiffposition.");
+					System.out.println("Falsche Koordinateneingabe");
 				}
-			} else {
-				System.out.println("Falsche Koordinateneingabe");
 			}
+			while (uboote < 4) {
+				System.out.println("Gebe die Postition deines Kreuzers ein (4 Kästchen).");
+				input = stdIn.readLine();
+				if (input.length() == 8) {
+					leftX = Integer.parseInt(input.substring(0, 1));
+					leftY = Integer.parseInt(input.substring(1, 2));
+					rightX = Integer.parseInt(input.substring(6, 7));
+					rightY = Integer.parseInt(input.substring(7, 8));
+					if (leftX == rightX && input.length() == 8) {
+						if (leftY == rightY-1 || leftY == rightY+1) {
+							uboote++;
+							if (leftY > rightY) {
+								for (int i=0; i<=1; i++) {
+									shipsPos[leftX][rightY+i] = true;
+								}
+								gameGrid.printShips(shipsPos);
+							} else {
+								for (int i=0; i<=1; i++) {
+									shipsPos[leftX][leftY+i] = true;
+								}
+								gameGrid.printShips(shipsPos);
+							}
+
+						}
+					} else if(leftY == rightY && input.length() == 8) {
+						if (leftX == rightX-1 || leftY == rightX+1) {
+							uboote++;
+							if (leftX > rightX) {
+								for (int i=0; i<=1; i++) {
+									shipsPos[rightX+i][rightY] = true;
+								}
+								gameGrid.printShips(shipsPos);
+							} else {
+								for (int i=0; i<=1; i++) {
+									shipsPos[leftX+i][rightY] = true;
+								}
+								gameGrid.printShips(shipsPos);
+							}
+
+						}
+					} else {
+						System.out.println("Flasche Eingabe der Schlachtschiffposition.");
+					}
+				} else {
+					System.out.println("Falsche Koordinateneingabe");
+				}
+			}
+		} catch (IOException e) {
+
 		}
 		return shipsPos;
 	}
 
 	public static void main(String[] args) {
-		int[] shipPos = new int[2];
 		String hostName = "";
 		int portNumber = -1;
 		boolean[][] ships;
@@ -256,13 +259,7 @@ public class SVClient {
 				String fromPlayer;
 				Grid gameGrid = new Grid("Player 2");
 
-				// reads in Ship positions and displays them on the grid
-				/*System.out.println("Position der Schiffe eingeben:");
-				for (int i=0; i<shipPos.length; i++)
-					shipPos[i] = Integer.parseInt(stdIn.readLine()) -1;	//-1 da Feld 1 1 im Array 0 0 abgespeichert wird
-				ships = initializeBoard(shipPos);*/
-				ships = getShipsPos(gameGrid);
-				//gameGrid.printShips(ships); 
+				ships = getShipsPos(gameGrid, stdIn);
 
 				while (true) {
 					if (stdIn.ready() == true && isPlayOneTurn == false) {
@@ -317,13 +314,7 @@ public class SVClient {
 				String fromPlayer;
 				Grid gameGrid = new Grid("Player 1");
 
-				// reads in Ship positions and displays them on the grid
-				/*System.out.println("Position der Schiffe eingeben:");
-				for (int i=0; i<shipPos.length; i++)
-					shipPos[i] = Integer.parseInt(stdIn.readLine()) -1;	//-1 da Feld 1 1 im Array 0 0 abgespeichert wird
-				ships = initializeBoard(shipPos);*/
-				ships = getShipsPos(gameGrid);
-				//gameGrid.printShips(ships); 
+				ships = getShipsPos(gameGrid, stdIn);
 
 				while (true) {
 					if (stdIn.ready() == true && isPlayOneTurn == true) {
@@ -355,6 +346,7 @@ public class SVClient {
 					}
 
 				}
+
 			} catch (UnknownHostException e) {
 				System.err.println("Don't know about host " + hostName);
 				System.exit(1);

@@ -4,7 +4,7 @@ public class Grid {
 		//System.out.println("Printing Ship");
 		for (int i=0; i<=9; i++) {
 			for (int j=0; j<=9; j++) {
-				if (ships[i][j] == true)
+				if (ships[i+1][j+1] == true)
 					StdDraw.filledSquare(i+0.5, 9.5-j, 0.5);
 			}
 		}
@@ -12,12 +12,12 @@ public class Grid {
 	public boolean printEnemyShot(boolean ships[][], int x, int y) {
 		if (ships[x][y] == true) {
 			StdDraw.setPenColor(StdDraw.RED);
-			StdDraw.filledSquare(x+0.5, 9.5-y, 0.5);
+			StdDraw.filledSquare(x-0.5, 10.5-y, 0.5);
 			StdDraw.setPenColor(StdDraw.BLACK);
 			return true;
 		} else {
 			StdDraw.setPenColor(StdDraw.GRAY);
-			StdDraw.filledSquare(x+0.5, 9.5-y, 0.5);
+			StdDraw.filledSquare(x-0.5, 10.5-y, 0.5);
 			StdDraw.setPenColor(StdDraw.BLACK);
 			return false;
 		}

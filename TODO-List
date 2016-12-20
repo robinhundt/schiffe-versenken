@@ -1,4 +1,6 @@
 #TODO:
 
-- correct ship placement with rule check
-- Game-Over check and message
+- more intuitive ship placement
+- prevent shooting at the same spot twice
+
+- REWRITE THE WHOLE CODE
